@@ -12,7 +12,7 @@ int err(char *str)
 int cd(char **argv, int i)
 {
     if(i < 2)
-        return err("error : bad argument"):
+        return err("error : bad argument\n"):
     if(chdir(argv[1]) == -1) // ARGV DE 1 
         return err("cannot change directory : "), err(*argv), err("\n");
     return 0;
@@ -36,15 +36,15 @@ int exec(char **argv, int i, char **envp)
 
         if(has_pipe && (dup2(fd[1], 1) == 1 || close(fd[0]) == -1 || close(fd[1]) == -1))
             return err("error fatal\n");
-        if(strcmp(*argv, "cd"))
+        if(!strcmp(*argv, "cd"))
             return cd(argv, i);
-        execve(argv, i, envp)
+        execve(*argv, i, envp) // execve pointeur argv
             return err("error cannot execute"), err(*argv), err("\n");
     }
     waitpid(pid, &status, 0)
     if(has_pipe && (dup2(fd[0], 0) == -1 || close(fd[0]) == -1 || close(fd[1]) == -1))
         return err("error fatal\n");
-    return WIFSTATUS(status) WEXITSTATUS(status);
+    return WIFEXITED(status) WEXITSTATUS(status); // WIFEXITED WEXITSTATUS
 }
 
 int main(int argc, char **argv, char **envp)
